@@ -2,6 +2,8 @@
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides real-time weather data to Claude using the [Open-Meteo API](https://open-meteo.com) — free, no API key required.
 
+**Live UI:** [ui-plum-five-69.vercel.app](https://ui-plum-five-69.vercel.app)
+
 ## Tool
 
 **`getWeather`** — Returns current weather for a given city.
@@ -44,6 +46,18 @@ Once registered, ask Claude things like:
 - "What's the weather in Tokyo?"
 - "Get the weather for New York"
 - "Is it raining in London?"
+
+## UI
+
+A React web app with city search and animated 5-day forecast is available at:
+**https://ui-plum-five-69.vercel.app**
+
+To run it locally:
+```bash
+cd ui
+npm install
+npm run dev
+```
 
 ## Requirements
 
