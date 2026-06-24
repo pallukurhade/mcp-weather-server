@@ -47,3 +47,26 @@ body {
   animation: shimmer 1.6s infinite;
   border-radius: 1rem;
 }
+
+@keyframes floatA {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-14px) rotate(3deg); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-10px) rotate(-4deg); }
+}
+
+@keyframes floatC {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-18px) scale(1.05); }
+}
+
+.float-slow { animation: floatA 5s ease-in-out infinite; }
+.float-med  { animation: floatB 4s ease-in-out infinite 0.8s; }
+.float-fast { animation: floatC 3.2s ease-in-out infinite 0.3s; }
+
+.weather-icon {
+  animation: floatC 4s ease-in-out infinite;
+}
