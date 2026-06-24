@@ -32,6 +32,16 @@ export interface GeoResult {
   admin1?: string;
 }
 
+export interface CurrentWeather {
+  temp: number;
+  feelsLike: number;
+  humidity: number;
+  windSpeed: number;
+  code: number;
+  label: string;
+  emoji: string;
+}
+
 export interface ForecastDay {
   date: string;
   code: number;
@@ -52,26 +62,43 @@ export async function searchCities(query: string): Promise<GeoResult[]> {
   return data.results ?? [];
 }
 
-export async function fetchForecast(lat: number, lon: number): Promise<ForecastDay[]> {
+export async function fetchWeather(lat: number, lon: number): Promise<{ current: CurrentWeather; forecast: ForecastDay[] }> {
   const res = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
+    `&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code` +
+    `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
     `&temperature_unit=celsius&wind_speed_unit=kmh&forecast_days=5`
   );
   const data = await res.json();
+
+  const c = data.current;
+  const code: number = c.weather_code;
+  const info = WMO_CODES[code] ?? { label: "Unknown", emoji: "🌡️" };
+  const current: CurrentWeather = {
+    temp: c.temperature_2m,
+    feelsLike: c.apparent_temperature,
+    humidity: c.relative_humidity_2m,
+    windSpeed: c.wind_speed_10m,
+    code,
+    label: info.label,
+    emoji: info.emoji,
+  };
+
   const d = data.daily;
-  return (d.time as string[]).map((date: string, i: number) => {
-    const code: number = d.weathercode[i];
-    const info = WMO_CODES[code] ?? { label: "Unknown", emoji: "🌡️" };
+  const forecast: ForecastDay[] = (d.time as string[]).map((date: string, i: number) => {
+    const dc: number = d.weather_code[i];
+    const di = WMO_CODES[dc] ?? { label: "Unknown", emoji: "🌡️" };
     return {
       date,
-      code,
-      label: info.label,
-      emoji: info.emoji,
+      code: dc,
+      label: di.label,
+      emoji: di.emoji,
       maxTemp: d.temperature_2m_max[i],
       minTemp: d.temperature_2m_min[i],
       precipitation: d.precipitation_sum[i],
       maxWind: d.wind_speed_10m_max[i],
     };
   });
+
+  return { current, forecast };
 }
