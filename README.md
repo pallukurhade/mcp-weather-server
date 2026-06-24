@@ -1,14 +1,27 @@
 # Weather MCP Server
 
-A simple [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides weather information to Claude.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides real-time weather data to Claude using the [Open-Meteo API](https://open-meteo.com) — free, no API key required.
 
 ## Tool
 
-**`getWeather`** — Returns the current weather for a given city.
+**`getWeather`** — Returns current weather for a given city.
 
-| Parameter | Type   | Description        |
-|-----------|--------|--------------------|
-| `city`    | string | Name of the city   |
+| Parameter | Type   | Description             |
+|-----------|--------|-------------------------|
+| `city`    | string | Name of the city to look up |
+
+**Response includes:**
+- Condition (e.g. Clear sky, Rain, Thunderstorm)
+- Temperature (°C)
+- Humidity (%)
+- Wind speed (km/h)
+
+## How it works
+
+1. Geocodes the city name using the [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api)
+2. Fetches live weather using the [Open-Meteo Forecast API](https://open-meteo.com/en/docs)
+
+No API key or account needed.
 
 ## Setup
 
@@ -30,6 +43,7 @@ Once registered, ask Claude things like:
 
 - "What's the weather in Tokyo?"
 - "Get the weather for New York"
+- "Is it raining in London?"
 
 ## Requirements
 
