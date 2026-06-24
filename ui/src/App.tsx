@@ -104,7 +104,7 @@ export default function App() {
         {/* Header */}
         <div className="text-center mb-10 fade-in">
           <h1 className="text-5xl font-extrabold text-white drop-shadow-lg tracking-tight">
-            Weather
+            Weather MCP Server
           </h1>
           <p className="text-white/60 mt-2 text-sm tracking-wide">5-day forecast · powered by Open-Meteo</p>
         </div>
