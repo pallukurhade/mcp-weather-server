@@ -1,63 +1,91 @@
-# Weather MCP Server
+# ☀️ Weather MCP Server
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides real-time weather data to Claude using the [Open-Meteo API](https://open-meteo.com) — free, no API key required.
+> Real-time weather data for Claude — powered by [Open-Meteo](https://open-meteo.com). No API key required.
 
-**Live UI:** [ui-plum-five-69.vercel.app](https://ui-plum-five-69.vercel.app)
+**[🌍 Live UI →](https://ui-plum-five-69.vercel.app)**
 
-## Tool
+---
 
-**`getWeather`** — Returns current weather for a given city.
+## What is this?
 
-| Parameter | Type   | Description             |
-|-----------|--------|-------------------------|
-| `city`    | string | Name of the city to look up |
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that gives Claude the ability to fetch live weather and 5-day forecasts for any city in the world. Pair it with the included React UI for a standalone weather app.
 
-**Response includes:**
-- Condition (e.g. Clear sky, Rain, Thunderstorm)
-- Temperature (°C)
-- Humidity (%)
-- Wind speed (km/h)
+---
 
-## How it works
+## MCP Tools
 
-1. Geocodes the city name using the [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api)
-2. Fetches live weather using the [Open-Meteo Forecast API](https://open-meteo.com/en/docs)
+### `getWeather`
+Returns current conditions for a given city.
 
-No API key or account needed.
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `city` | `string` | Name of the city |
 
-## Setup
+**Returns:** condition, temperature (°C), humidity (%), wind speed (km/h)
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+### `getForecast`
+Returns a 5-day daily forecast.
 
-2. Register the MCP server with Claude Code:
-   ```bash
-   claude mcp add weather-example npx tsx /path/to/main.ts
-   ```
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `latitude` | `number` | Latitude |
+| `longitude` | `number` | Longitude |
 
-3. Restart Claude Code — the `getWeather` tool will be available in your session.
+**Returns:** daily high/low, precipitation, wind, weather code
 
-## Usage
+---
 
-Once registered, ask Claude things like:
+## Quickstart
 
-- "What's the weather in Tokyo?"
-- "Get the weather for New York"
-- "Is it raining in London?"
+**1. Install dependencies**
+```bash
+npm install
+```
 
-## UI
+**2. Register with Claude Code**
+```bash
+claude mcp add weather-example npx tsx /path/to/main.ts
+```
 
-A React web app with city search and animated 5-day forecast is available at:
-**https://ui-plum-five-69.vercel.app**
+**3. Ask Claude about the weather**
+```
+What's the weather in Tokyo?
+Will it rain in London this week?
+Is it cold in New York right now?
+```
 
-To run it locally:
+---
+
+## Web UI
+
+A React + Tailwind app with live city search, animated weather icons, current conditions, and a 5-day forecast strip.
+
+**[→ ui-plum-five-69.vercel.app](https://ui-plum-five-69.vercel.app)**
+
+**Run locally:**
 ```bash
 cd ui
 npm install
 npm run dev
 ```
+
+---
+
+## How it works
+
+```
+Claude → MCP tool call
+           ↓
+  Open-Meteo Geocoding API   (city name → lat/lon)
+           ↓
+  Open-Meteo Forecast API    (lat/lon → weather data)
+           ↓
+        Claude
+```
+
+Everything is free and open — no accounts, no keys, no rate limits for reasonable usage.
+
+---
 
 ## Requirements
 
